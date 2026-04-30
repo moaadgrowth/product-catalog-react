@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index(): Response
     {
         $categories = Category::query()
-            ->orderBy('name', 'asc')
+            ->latest()
             ->get();
 
         return Inertia::render('Admin/Category/Index', [
@@ -51,7 +51,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): RedirectResponse
     {
-        $category->delete();
+        Category::destroy($category->id);
 
         return redirect()->route('admin.categories.index');
     }
