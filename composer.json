@@ -85,7 +85,10 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
-        ]
+        ],
+        "wayfinder:generate": [
+    "@php artisan wayfinder:generate"
+]
     },
     "extra": {
         "laravel": {
