@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index(): Response
     {
         $categories = Category::query()
-            ->orderBy('name')
+            ->orderBy('name', 'asc')
             ->get();
 
         return Inertia::render('Admin/Category/Index', [

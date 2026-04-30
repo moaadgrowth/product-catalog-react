@@ -29,7 +29,10 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     </Link>
 
                     <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-stone-600">
-                        <Link href={products()} className={linkClass('/products')}>
+                        <Link
+                            href={products()}
+                            className={linkClass('/products')}
+                        >
                             Shop
                         </Link>
                         <Link

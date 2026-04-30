@@ -37,10 +37,9 @@ function onCategoryChange(event: ChangeEvent<HTMLSelectElement>): void {
         return;
     }
 
-    router.visit(
-        productsIndex.url({ query: { category: Number(value) } }),
-        { preserveScroll: true },
-    );
+    router.visit(productsIndex.url({ query: { category: Number(value) } }), {
+        preserveScroll: true,
+    });
 }
 
 export default function ProductsIndex({
@@ -73,7 +72,10 @@ export default function ProductsIndex({
                     >
                         <option value="">All categories</option>
                         {categories.map((category) => (
-                            <option key={category.id} value={String(category.id)}>
+                            <option
+                                key={category.id}
+                                value={String(category.id)}
+                            >
                                 {category.name}
                             </option>
                         ))}

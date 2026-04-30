@@ -1,45 +1,55 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/AdminLayout';
-import { create, edit, destroy } from '@/routes/admin/categories/index';
-import { products as productsIndex } from '@/routes/index';
+import { index as adminCategoriesIndex } from '@/routes/admin/categories/index';
+import { create, destroy, edit } from '@/routes/admin/products/index';
 
-type CategoryRow = {
+type CategoryStub = {
     id: number;
     name: string;
 };
 
-type PageProps = {
-    categories: CategoryRow[];
+type ProductRow = {
+    id: number;
+    name: string;
+    description: string | null;
+    price: string;
+    categories: CategoryStub[];
 };
 
-function confirmDestroy(categoryId: number, categoryName: string): void {
-    if (
-        !window.confirm(
-            `Delete category "${categoryName}"? Products will be unlinked from it.`,
-        )
-    ) {
+type PageProps = {
+    products: ProductRow[];
+};
+
+function confirmDestroy(productId: number, productName: string): void {
+    if (!confirm(`Delete product "${productName}"? This cannot be undone.`)) {
         return;
     }
 
-    router.delete(destroy.url({ category: categoryId }));
+    router.delete(destroy.url({ product: productId }));
 }
 
-export default function AdminCategoryIndex({ categories }: PageProps) {
+function categoryLabel(product: ProductRow): string {
+    const names = product.categories.map((c) => c.name);
+
+    return names.length ? names.join(', ') : '—';
+}
+
+export default function AdminProductIndex({ products }: PageProps) {
     return (
         <>
-            <Head title="Categories" />
+            <Head title="Products" />
 
             <AdminLayout>
-                <div className="mx-auto max-w-3xl space-y-8 p-6">
+                <div className="mx-auto max-w-4xl space-y-8 p-6">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <h1 className="font-display text-2xl font-semibold text-stone-900">
-                            Categories
+                            Products
                         </h1>
                         <Link
-                            href={create()}
+                            href={create.url()}
                             className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800"
                         >
-                            Add category
+                            Add product
                         </Link>
                     </div>
 
@@ -55,6 +65,18 @@ export default function AdminCategoryIndex({ categories }: PageProps) {
                                     </th>
                                     <th
                                         scope="col"
+                                        className="px-4 py-3 text-left font-medium text-stone-700"
+                                    >
+                                        Categories
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-4 py-3 text-right font-medium text-stone-700"
+                                    >
+                                        Price
+                                    </th>
+                                    <th
+                                        scope="col"
                                         className="px-4 py-3 text-right font-medium text-stone-700"
                                     >
                                         Actions
@@ -62,25 +84,31 @@ export default function AdminCategoryIndex({ categories }: PageProps) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-stone-200">
-                                {categories.length === 0 ? (
+                                {products.length === 0 ? (
                                     <tr>
                                         <td
-                                            colSpan={2}
+                                            colSpan={4}
                                             className="px-4 py-6 text-center text-stone-500"
                                         >
-                                            No categories yet. Add one above.
+                                            No products yet. Add one above.
                                         </td>
                                     </tr>
                                 ) : (
-                                    categories.map((category) => (
-                                        <tr key={category.id}>
+                                    products.map((product) => (
+                                        <tr key={product.id}>
                                             <td className="px-4 py-3 text-stone-900">
-                                                {category.name}
+                                                {product.name}
+                                            </td>
+                                            <td className="px-4 py-3 text-stone-600">
+                                                {categoryLabel(product)}
+                                            </td>
+                                            <td className="px-4 py-3 text-right text-stone-900">
+                                                {product.price}
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <Link
-                                                    href={edit({
-                                                        category: category.id,
+                                                    href={edit.url({
+                                                        product: product.id,
                                                     })}
                                                     className="mr-2 font-medium text-amber-900 hover:text-amber-950"
                                                 >
@@ -91,8 +119,8 @@ export default function AdminCategoryIndex({ categories }: PageProps) {
                                                     className="font-medium text-red-600 hover:text-red-800"
                                                     onClick={() =>
                                                         confirmDestroy(
-                                                            category.id,
-                                                            category.name,
+                                                            product.id,
+                                                            product.name,
                                                         )
                                                     }
                                                 >
@@ -108,10 +136,10 @@ export default function AdminCategoryIndex({ categories }: PageProps) {
 
                     <p className="mt-8">
                         <Link
-                            href={productsIndex()}
+                            href={adminCategoriesIndex.url()}
                             className="text-sm text-stone-600 underline hover:text-amber-900"
                         >
-                            ← Back to public products
+                            ← Back to categories
                         </Link>
                     </p>
                 </div>

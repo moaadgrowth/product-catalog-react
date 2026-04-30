@@ -63,9 +63,7 @@ export default function AdminCategoryCreate() {
                                 disabled={form.processing}
                                 className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 disabled:opacity-50"
                             >
-                                {form.processing
-                                    ? 'Saving…'
-                                    : 'Add category'}
+                                {form.processing ? 'Saving…' : 'Add category'}
                             </button>
                             <Link
                                 href={adminCategoriesIndex()}
